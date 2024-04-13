@@ -18,16 +18,16 @@ export async function uploadFormData(
 
     formData.append("apikey", process.env.MEDIALIT_API_KEY);
 
-    let response: any = await fetch(`${process.env.MEDIALIT_ENDPOINT}/media/create`, {
+    const response: any = await fetch(`${process.env.MEDIALIT_ENDPOINT}/media/create`, {
         method: "POST",
         body: formData,
     });
 
-    if (!response.ok) {
-        console.error(await response.text())
-    } 
+    const resp = await response.json() 
 
-    const resp = await response.json();
-    console.log(resp)
-    return {file: resp.file};
+    if (!response.ok) {
+        return { error: resp.error }
+    } 
+        
+    return { file: resp.file }
 }
